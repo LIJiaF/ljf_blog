@@ -13,7 +13,8 @@
       <!--侧边栏-->
       <div class="aside">
         <el-menu
-          default-active="1"
+          :default-active="activeIndex"
+          :unique-opened="true"
           class="el-menu-vertical-demo">
           <el-submenu index="1">
             <template slot="title">
@@ -21,7 +22,16 @@
               <span>文章管理</span>
             </template>
             <router-link to="/admin/article">
-              <el-menu-item index="1-1">文章列表</el-menu-item>
+              <el-menu-item index="article">文章列表</el-menu-item>
+            </router-link>
+          </el-submenu>
+          <el-submenu index="2">
+            <template slot="title">
+              <i class="el-icon-document"></i>
+              <span>用户管理</span>
+            </template>
+            <router-link to="/admin/article/add">
+              <el-menu-item index="user">用户列表</el-menu-item>
             </router-link>
           </el-submenu>
         </el-menu>
@@ -35,7 +45,16 @@
 </template>
 
 <script>
-  export default {}
+  export default {
+    data () {
+      return {
+        activeIndex: ''
+      }
+    },
+    created () {
+      this.activeIndex = this.$route.path.split('/')[2];
+    },
+  }
 </script>
 
 <style scoped>
@@ -89,5 +108,6 @@
     right: 0;
     bottom: 0;
     overflow: auto;
+    padding: 10px;
   }
 </style>

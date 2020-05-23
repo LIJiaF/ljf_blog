@@ -6,6 +6,7 @@ class Article(Base):
     __tablename__ = 'article'
 
     id = Column(Integer, Sequence('article_id_seq'), primary_key=True)
+    image_url = Column(String(250))
     title = Column(String(50))
     author = Column(String(30))
     content = Column(Text)

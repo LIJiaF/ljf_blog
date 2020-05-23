@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 const Index = () => import('@/page/index.vue');
 const ArticleList = () => import('@/page/article/list.vue');
+const ArticleAdd = () => import('@/page/article/add.vue');
 
 Vue.use(Router)
 
@@ -17,6 +18,11 @@ export default new Router({
           path: 'article',
           name: 'ArticleList',
           component: ArticleList
+        },
+        {
+          path: 'article/add',
+          name: 'ArticleAdd',
+          component: ArticleAdd
         },
       ]
     }
