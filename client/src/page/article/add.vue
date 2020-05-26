@@ -8,8 +8,8 @@
         <el-upload
           class="avatar-uploader"
           list-type="picture-card"
-          action="http://127.0.0.1:8888/upload/"
-          :show-file-list="false"
+          action="http://127.0.0.1:8888/upload"
+          :auto-upload="true"
           :on-success="handleAvatarSuccess"
           :before-upload="beforeAvatarUpload">
           <img v-if="data.image_url" :src="data.image_url" class="avatar">

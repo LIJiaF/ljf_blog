@@ -1,39 +1,7 @@
 from tornado.ioloop import IOLoop
-from tornado.web import RequestHandler, Application
+from tornado.web import Application
 
-import json
-
-from model import create_table, drop_table, DBSession, User
-
-
-class CreateTableHandler(RequestHandler):
-    def get(self):
-        create_table()
-
-
-class DropTableHandler(RequestHandler):
-    def get(self):
-        drop_table()
-
-
-class UploadHandler(RequestHandler):
-    def get(self):
-        pass
-
-    def post(self):
-        pass
-
-
-class ArticleHandler(RequestHandler):
-    def get(self):
-        session = DBSession()
-        new_user = User(name='haha')
-        session.add(new_user)
-        session.commit()
-        session.close()
-
-    def post(self):
-        self.finish(json.dumps({'msg': 'post'}))
+from handler import *
 
 
 def make_app():
