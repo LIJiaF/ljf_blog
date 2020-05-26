@@ -7,8 +7,9 @@
       <el-form-item label="缩略图">
         <el-upload
           class="avatar-uploader"
-          action="https://jsonplaceholder.typicode.com/posts/"
-          :show-file-list="false"
+          list-type="picture-card"
+          action="http://127.0.0.1:8888/upload"
+          :auto-upload="true"
           :on-success="handleAvatarSuccess"
           :before-upload="beforeAvatarUpload">
           <img v-if="data.image_url" :src="data.image_url" class="avatar">
@@ -16,7 +17,7 @@
         </el-upload>
       </el-form-item>
       <el-form-item label="内容">
-        <el-input type="textarea" v-model="data.content"></el-input>
+        <Editor></Editor>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="handleAdd">添加</el-button>
@@ -27,15 +28,21 @@
 </template>
 
 <script>
+  import Editor from '@/components/editor'
+
   export default {
     data () {
       return {
+        action: 'http://127.0.0.1:8888/upload',
         data: {
           title: '',
           image_url: '',
           content: ''
         }
       }
+    },
+    components: {
+      Editor
     },
     methods: {
       handleAdd () {

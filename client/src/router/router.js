@@ -30,6 +30,10 @@ export default new Router({
           component: ArticleList
         },
       ]
+    },
+    {
+      path: '*',
+      redirect: '/admin/article'
     }
   ]
 })
