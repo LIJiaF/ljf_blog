@@ -16,7 +16,7 @@
         </el-upload>
       </el-form-item>
       <el-form-item label="内容">
-        <el-input type="textarea" v-model="data.content"></el-input>
+        <Editor></Editor>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="handleAdd">添加</el-button>
@@ -27,6 +27,8 @@
 </template>
 
 <script>
+  import Editor from '@/components/editor'
+
   export default {
     data () {
       return {
@@ -36,6 +38,9 @@
           content: ''
         }
       }
+    },
+    components: {
+      Editor
     },
     methods: {
       handleAdd () {

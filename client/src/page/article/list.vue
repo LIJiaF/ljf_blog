@@ -67,10 +67,11 @@
         label="操作">
         <template slot-scope="scope">
           <div>
-            <el-button
-              @click="handleEdit(scope.row)"
-              type="text">编辑
-            </el-button>
+            <router-link to="/admin/article/edit">
+              <el-button
+                type="text">编辑
+              </el-button>
+            </router-link>
             <el-button
               @click="handleDelete(scope.row)"
               type="text">删除

@@ -25,6 +25,10 @@ export default new Router({
           component: ArticleAdd
         },
       ]
+    },
+    {
+      path: '*',
+      redirect: '/admin/article'
     }
   ]
 })
