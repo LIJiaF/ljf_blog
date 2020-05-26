@@ -16,6 +16,14 @@ class DropTableHandler(RequestHandler):
         drop_table()
 
 
+class UploadHandler(RequestHandler):
+    def get(self):
+        pass
+
+    def post(self):
+        pass
+
+
 class ArticleHandler(RequestHandler):
     def get(self):
         session = DBSession()
@@ -31,6 +39,7 @@ class ArticleHandler(RequestHandler):
 def make_app():
     return Application([
         (r'/*', ArticleHandler),
+        (r'/upload', UploadHandler),
         (r'/article', ArticleHandler),
         (r'/create_table', CreateTableHandler),
         (r'/drop_table', DropTableHandler),

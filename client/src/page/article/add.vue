@@ -7,7 +7,8 @@
       <el-form-item label="缩略图">
         <el-upload
           class="avatar-uploader"
-          action="https://jsonplaceholder.typicode.com/posts/"
+          list-type="picture-card"
+          action="http://127.0.0.1:8888/upload/"
           :show-file-list="false"
           :on-success="handleAvatarSuccess"
           :before-upload="beforeAvatarUpload">
@@ -32,6 +33,7 @@
   export default {
     data () {
       return {
+        action: 'http://127.0.0.1:8888/upload',
         data: {
           title: '',
           image_url: '',
