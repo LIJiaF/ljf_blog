@@ -30,7 +30,7 @@
               <i class="el-icon-document"></i>
               <span>用户管理</span>
             </template>
-            <router-link to="/admin/article/add">
+            <router-link to="/admin/user">
               <el-menu-item index="user">用户列表</el-menu-item>
             </router-link>
           </el-submenu>

@@ -24,6 +24,11 @@ export default new Router({
           name: 'ArticleAdd',
           component: ArticleAdd
         },
+        {
+          path: 'user',
+          name: 'ArticleList',
+          component: ArticleList
+        },
       ]
     }
   ]
