@@ -8,10 +8,15 @@
         <el-upload
           class="avatar-uploader"
           list-type="picture-card"
-          action="http://127.0.0.1:8888/upload"
-          :auto-upload="true"
-          :on-success="handleAvatarSuccess"
-          :before-upload="beforeAvatarUpload">
+          ref="upload"
+          :limit="1"
+          :auto-upload="false"
+          :action="action"
+          :on-exceed="handleExceed"
+          :on-change="handleChange"
+          :on-success="handleSuccess"
+          :on-error="handleError"
+          :before-upload="beforeUpload">
           <img v-if="data.image_url" :src="data.image_url" class="avatar">
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
@@ -48,16 +53,37 @@
       handleAdd () {
 
       },
-      beforeAvatarUpload () {
+      beforeUpload (file, fileList) {
+        console.log(file, fileList);
       },
-      handleAvatarSuccess () {
+      handleExceed () {
+        this.$message.error('最多只能上传一张图片');
+      },
+      handleChange (file) {
+        let is5M = file.raw.size < 5 * 1024 * 1024;
+        let isType = (file.raw.type === 'image/jpeg' || file.raw.type === 'image/png');
+        if (!is5M) {
+          this.$message.error('大小超出5M');
+          this.$refs.upload.clearFiles();
+          return false;
+        }
+        if (!isType) {
+          this.$message.error('图片类型只能是jpg/png');
+          this.$refs.upload.clearFiles();
+          return false;
+        }
+      },
+      handleSuccess () {
+      },
+      handleError (err, file, fileList) {
+        console.log(err, file, fileList);
       }
     }
   }
 </script>
 
 <style scoped>
-  >>> .avatar-uploader .el-upload {
+  .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9;
     border-radius: 6px;
     cursor: pointer;
@@ -65,23 +91,14 @@
     overflow: hidden;
   }
 
-  >>> .avatar-uploader .el-upload:hover {
+  .avatar-uploader .el-upload:hover {
     border-color: #409EFF;
   }
 
   .avatar-uploader-icon {
     font-size: 28px;
     color: #8c939d;
-    width: 100px;
-    height: 100px;
-    line-height: 100px;
     text-align: center;
-  }
-
-  .avatar {
-    width: 100px;
-    height: 100px;
-    display: block;
   }
 
   .main {
