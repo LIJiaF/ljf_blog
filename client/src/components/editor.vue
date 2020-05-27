@@ -1,7 +1,6 @@
 <template>
   <div>
-    <div ref="editor" style="text-align:left"></div>
-    <button v-on:click="getContent">查看内容</button>
+    <div ref="editor"></div>
   </div>
 </template>
 
@@ -46,13 +45,9 @@
       // 更改内容
       editor.customConfig.onchange = (html) => {
         this.editorContent = XSS(html);
+        this.$emit('getEditorContent', this.editorContent);
       };
       editor.create()
-    },
-    methods: {
-      getContent: function () {
-        alert(this.editorContent)
-      }
     }
   }
 </script>

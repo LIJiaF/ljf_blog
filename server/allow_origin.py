@@ -12,7 +12,7 @@ class BaseHandler(RequestHandler):
             'http://127.0.0.1:8080',
         ]
         if 'Origin' in self.request.headers:
-            Origin = self.request.headers['Origin']
-            if Origin in allow_list:
-                self.set_header('Access-Control-Allow-Origin', Origin)
+            origin = self.request.headers['Origin']
+            if origin in allow_list:
+                self.set_header('Access-Control-Allow-Origin', origin)
                 self.set_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')

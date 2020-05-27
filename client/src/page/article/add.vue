@@ -15,14 +15,13 @@
           :on-exceed="handleExceed"
           :on-change="handleChange"
           :on-success="handleSuccess"
-          :on-error="handleError"
-          :before-upload="beforeUpload">
+          :on-error="handleError">
           <img v-if="data.image_url" :src="data.image_url" class="avatar">
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
       </el-form-item>
       <el-form-item label="内容">
-        <Editor></Editor>
+        <Editor @getEditorContent="getEditorContent"></Editor>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="handleAdd">添加</el-button>
@@ -50,18 +49,26 @@
       Editor
     },
     methods: {
-      handleAdd () {
-
+      getEditorContent (content) {
+        this.data.content = content;
       },
-      beforeUpload (file, fileList) {
-        console.log(file, fileList);
+      handleAdd () {
+        if (!this.data.title) {
+          this.$message.error('标题不能为空');
+          return false;
+        }
+        if (!this.data.content) {
+          this.$message.error('内容不能为空');
+          return false;
+        }
+        this.$refs.upload.submit();
       },
       handleExceed () {
         this.$message.error('最多只能上传一张图片');
       },
       handleChange (file) {
         let is5M = file.raw.size < 5 * 1024 * 1024;
-        let isType = (file.raw.type === 'image/jpeg' || file.raw.type === 'image/png');
+        let isType = (file.raw.type === 'image/jpeg' || file.raw.type === 'image/jpeg' || file.raw.type === 'image/png');
         if (!is5M) {
           this.$message.error('大小超出5M');
           this.$refs.upload.clearFiles();
@@ -73,7 +80,8 @@
           return false;
         }
       },
-      handleSuccess () {
+      handleSuccess (response, file) {
+        console.log(response, file);
       },
       handleError (err, file, fileList) {
         console.log(err, file, fileList);

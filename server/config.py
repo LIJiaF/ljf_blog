@@ -5,3 +5,5 @@ pgsqlConfig = {
     'password': 'root',
     'port': '5433'
 }
+
+images_dir = 'images'
