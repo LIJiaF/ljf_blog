@@ -3,7 +3,6 @@ from sqlalchemy.orm import sessionmaker
 
 from config import pgsqlConfig
 from .orm_base import Base
-from .user import User
 from .article import Article
 
 # 初始化数据库连接:

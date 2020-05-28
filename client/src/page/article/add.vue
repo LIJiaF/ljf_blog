@@ -16,8 +16,7 @@
           :on-change="handleChange"
           :on-success="handleSuccess"
           :on-error="handleError">
-          <img v-if="data.image_url" :src="data.image_url" class="avatar">
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          <i class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
       </el-form-item>
       <el-form-item label="内容">
@@ -81,7 +80,25 @@
         }
       },
       handleSuccess (response) {
-        console.log(response);
+        if (!response.code) {
+          this.data.image_url = response.image_url;
+          // 添加数据
+          let data = new FormData();
+          data.append('title', this.data.title);
+          data.append('image_url', this.data.image_url);
+          data.append('content', this.data.content);
+          this.$axios.post('/api/article', data)
+            .then((res) => {
+              if (!res.data.code) {
+                this.$router.push('/admin/article');
+              } else {
+                this.$message.error(res.data.msg);
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            })
+        }
       },
       handleError (err) {
         this.$message.error(JSON.parse(err.message).msg);
