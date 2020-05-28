@@ -67,10 +67,10 @@
         this.$message.error('最多只能上传一张图片');
       },
       handleChange (file) {
-        let is5M = file.raw.size < 5 * 1024 * 1024;
-        let isType = (file.raw.type === 'image/jpeg' || file.raw.type === 'image/jpeg' || file.raw.type === 'image/png');
+        let is5M = file.raw.size < 2 * 1024 * 1024;
+        let isType = (file.raw.type === 'image/jpeg' || file.raw.type === 'image/png');
         if (!is5M) {
-          this.$message.error('大小超出5M');
+          this.$message.error('大小超出2M');
           this.$refs.upload.clearFiles();
           return false;
         }
@@ -80,11 +80,11 @@
           return false;
         }
       },
-      handleSuccess (response, file) {
-        console.log(response, file);
+      handleSuccess (response) {
+        console.log(response);
       },
-      handleError (err, file, fileList) {
-        console.log(err, file, fileList);
+      handleError (err) {
+        this.$message.error(JSON.parse(err.message).msg);
       }
     }
   }
