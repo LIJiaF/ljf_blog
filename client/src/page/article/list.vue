@@ -73,7 +73,7 @@
               </el-button>
             </router-link>
             <el-button
-              @click="handleDelete(scope.row)"
+              @click="handleDelete(scope.row.id)"
               type="text">删除
             </el-button>
           </div>
@@ -95,22 +95,56 @@
   export default {
     data () {
       return {
-        table_data: [{
-          'image_url': 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1590247256601&di=72771614f2dd55257e90825d29e8a08d&imgtype=0&src=http%3A%2F%2Ft8.baidu.com%2Fit%2Fu%3D1484500186%2C1503043093%26fm%3D79%26app%3D86%26f%3DJPEG%3Fw%3D1280%26h%3D853',
-          'title': '测试测试测试测试',
-          'author': '李家富',
-          'create_date': '2020-05-20 13:14:00',
-          'write_date': '2020-05-20 13:14:00',
-        }],
+        table_data: [],
         search_val: '',
       }
+    },
+    created () {
+      this.$axios.get('/api/admin/article')
+        .then((res) => {
+          this.table_data = res.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     methods: {
       handleSearch () {
       },
-      handleEdit () {
-      },
-      handleDelete () {
+      handleDelete (article_id) {
+        this.$confirm('此操作将永久删除该文章, 是否继续?', '提示', {
+          cancelButtonText: '取消',
+          confirmButtonText: '确定',
+          type: 'warning',
+          center: true
+        }).then(() => {
+          let data = new FormData();
+          data.append('article_id', article_id);
+          this.$axios.delete('/api/admin/article', {data: data})
+            .then((res) => {
+              if (!res.data.code) {
+                // if (this.cur_page > 1 && this.table_data.length <= ((this.cur_page - 1) * this.page_size) + 1) {
+                //   this.cur_page = this.cur_page - 1;
+                // }
+                // this.getData(this.cur_page);
+                this.$message({
+                  type: 'success',
+                  message: res.data.msg,
+                  showClose: true
+                });
+              } else {
+                this.$message({
+                  message: res.data.msg,
+                  type: 'error',
+                  showClose: true
+                });
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }).catch(() => {
+        });
       },
       currentChange () {
       }

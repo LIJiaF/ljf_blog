@@ -15,11 +15,11 @@ def make_app():
     }
 
     return Application([
-        (r'/*', ArticleHandler),
+        (r'/admin/article', ArticleHandler),
         (r'/upload', UploadHandler),
-        (r'/article', ArticleHandler),
         (r'/create_table', CreateTableHandler),
         (r'/drop_table', DropTableHandler),
+        (r'/*', ArticleHandler),
         (r"/images/(.*)", StaticFileHandler, {"path": os.path.join(current_path, "images")})  # 访问静态资源路由
     ], **setting)
 

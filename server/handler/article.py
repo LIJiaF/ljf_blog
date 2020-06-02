@@ -3,11 +3,24 @@ import json
 
 from tornado.web import RequestHandler
 from model import DBSession, Article
+from config import domain_name
 
 
 class ArticleHandler(RequestHandler):
     def get(self):
-        pass
+        session = DBSession()
+        data = session.query(Article).all()
+        result = []
+        for d in data:
+            result.append({
+                'id': d.id,
+                'image_url': domain_name + d.image_url,
+                'title': d.title,
+                'author': d.author,
+                'create_date': d.create_date.strftime('%Y-%m-%d %H:%M:%S'),
+                'write_date': d.write_date.strftime('%Y-%m-%d %H:%M:%S'),
+            })
+        self.finish(json.dumps(result))
 
     def post(self):
         title = self.get_body_argument('title', None)
@@ -35,3 +48,7 @@ class ArticleHandler(RequestHandler):
             self.finish(json.dumps({'code': -1, 'msg': '添加失败'}))
 
         self.finish(json.dumps({'code': 0, 'msg': '添加成功'}))
+
+    def delete(self):
+        article_id = self.get_argument('article_id', None)
+        print(article_id)

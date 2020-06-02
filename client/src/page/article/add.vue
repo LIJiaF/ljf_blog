@@ -60,7 +60,12 @@
           this.$message.error('内容不能为空');
           return false;
         }
-        this.$refs.upload.submit();
+        if (this.$refs.upload.uploadFiles.length) {
+          this.$refs.upload.submit();
+        } else {
+          this.handlesubmit();
+        }
+
       },
       handleExceed () {
         this.$message.error('最多只能上传一张图片');
@@ -82,26 +87,29 @@
       handleSuccess (response) {
         if (!response.code) {
           this.data.image_url = response.image_url;
-          // 添加数据
-          let data = new FormData();
-          data.append('title', this.data.title);
-          data.append('image_url', this.data.image_url);
-          data.append('content', this.data.content);
-          this.$axios.post('/api/article', data)
-            .then((res) => {
-              if (!res.data.code) {
-                this.$router.push('/admin/article');
-              } else {
-                this.$message.error(res.data.msg);
-              }
-            })
-            .catch((err) => {
-              console.log(err);
-            })
+          this.handlesubmit();
         }
       },
       handleError (err) {
         this.$message.error(JSON.parse(err.message).msg);
+      },
+      handlesubmit () {
+        // 添加数据
+        let data = new FormData();
+        data.append('title', this.data.title);
+        data.append('image_url', this.data.image_url);
+        data.append('content', this.data.content);
+        this.$axios.post('/api/admin/article', data)
+          .then((res) => {
+            if (!res.data.code) {
+              this.$router.push('/admin/article');
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          })
       }
     }
   }
