@@ -67,7 +67,7 @@
         label="操作">
         <template slot-scope="scope">
           <div>
-            <router-link to="/admin/article/edit">
+            <router-link :to="{name: 'ArticleEdit', params: {article_id: scope.row.id}}">
               <el-button
                 type="text">编辑
               </el-button>
@@ -85,6 +85,8 @@
       <el-pagination
         background
         layout="total, prev, pager, next"
+        :total="total"
+        :page-size="page_size"
         @current-change="currentChange">
       </el-pagination>
     </div>
@@ -97,18 +99,27 @@
       return {
         table_data: [],
         search_val: '',
+        total: 3,
+        page_size: 5,
       }
     },
     created () {
-      this.$axios.get('/api/admin/article')
-        .then((res) => {
-          this.table_data = res.data;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      this.getData();
     },
     methods: {
+      getData (cur_page = 1) {
+        let params = {};
+        params.cur_page = cur_page;
+        this.$axios.get('/api/admin/article', {params: params})
+          .then((res) => {
+            this.table_data = res.data.data;
+            this.page_size = res.data.page_size;
+            this.total = res.data.total;
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+      },
       handleSearch () {
       },
       handleDelete (article_id) {
@@ -118,15 +129,15 @@
           type: 'warning',
           center: true
         }).then(() => {
-          let data = new FormData();
-          data.append('article_id', article_id);
-          this.$axios.delete('/api/admin/article', {data: data})
+          let params = {};
+          params.article_id = article_id;
+          this.$axios.delete('/api/admin/article', {params: params})
             .then((res) => {
               if (!res.data.code) {
-                // if (this.cur_page > 1 && this.table_data.length <= ((this.cur_page - 1) * this.page_size) + 1) {
-                //   this.cur_page = this.cur_page - 1;
-                // }
-                // this.getData(this.cur_page);
+                if (this.cur_page > 1 && this.table_data.length <= ((this.cur_page - 1) * this.page_size) + 1) {
+                  this.cur_page = this.cur_page - 1;
+                }
+                this.getData(this.cur_page);
                 this.$message({
                   type: 'success',
                   message: res.data.msg,

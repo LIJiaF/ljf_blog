@@ -47,7 +47,25 @@
     components: {
       Editor
     },
+    created () {
+      let components_name = this.$route.name;
+      let article_id = this.$route.params.article_id;
+      if (components_name == 'ArticleEdit') {
+        this.getData(article_id);
+      }
+    },
     methods: {
+      getData (article_id) {
+        let params = {};
+        params.article_id = article_id;
+        this.$axios.get('/api/admin/article', {params: params})
+          .then((res) => {
+            this.data = res.data;
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+      },
       getEditorContent (content) {
         this.data.content = content;
       },

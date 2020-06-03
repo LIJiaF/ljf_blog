@@ -25,15 +25,20 @@ export default new Router({
           component: ArticleAdd
         },
         {
+          path: 'article/edit/:article_id',
+          name: 'ArticleEdit',
+          component: ArticleAdd
+        },
+        {
           path: 'user',
           name: 'ArticleList',
           component: ArticleList
         },
       ]
     },
-    {
-      path: '*',
-      redirect: '/admin/article'
-    }
+    // {
+    //   path: '*',
+    //   redirect: '/admin/article'
+    // }
   ]
 })

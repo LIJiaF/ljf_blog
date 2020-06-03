@@ -8,11 +8,35 @@ from config import domain_name
 
 class ArticleHandler(RequestHandler):
     def get(self):
+        cur_page = self.get_argument('cur_page', '1')
+        article_id = self.get_argument('article_id', None)
+        page_size = 5
+
+        if article_id:
+            pass
+
+        sql = """
+            select (
+                select count(id)
+                from article
+            ) as total, *
+            from article
+            order by id desc
+            limit %d offset %d
+        """ % (page_size, (int(cur_page) - 1) * page_size)
+
         session = DBSession()
-        data = session.query(Article).all()
-        result = []
+        cursor = session.execute(sql)
+        data = cursor.fetchall()
+
+        table_data = {
+            'data': [],
+            'page_size': page_size,
+            'total': data[0]['total'] if data else 0
+        }
+
         for d in data:
-            result.append({
+            table_data['data'].append({
                 'id': d.id,
                 'image_url': domain_name + d.image_url,
                 'title': d.title,
@@ -20,7 +44,8 @@ class ArticleHandler(RequestHandler):
                 'create_date': d.create_date.strftime('%Y-%m-%d %H:%M:%S'),
                 'write_date': d.write_date.strftime('%Y-%m-%d %H:%M:%S'),
             })
-        self.finish(json.dumps(result))
+
+        self.finish(json.dumps(table_data))
 
     def post(self):
         title = self.get_body_argument('title', None)
@@ -51,4 +76,17 @@ class ArticleHandler(RequestHandler):
 
     def delete(self):
         article_id = self.get_argument('article_id', None)
-        print(article_id)
+
+        session = DBSession()
+        article = session.query(Article).filter_by(id=article_id).one()
+        if not article:
+            self.finish(json.dumps({'code': -1, 'msg': '删除失败'}))
+
+        try:
+            session.query(Article).filter_by(id=article_id).delete()
+            session.commit()
+        except Exception as e:
+            print(e)
+            self.finish(json.dumps({'code': -1, 'msg': '删除失败'}))
+
+        self.finish(json.dumps({'code': 0, 'msg': '删除成功'}))

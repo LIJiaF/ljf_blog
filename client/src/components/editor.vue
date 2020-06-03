@@ -39,7 +39,7 @@
       // 忽略粘贴内容中的图片
       editor.customConfig.pasteIgnoreImg = true;
       // onchange 触发的延迟时间
-      editor.customConfig.onchangeTimeout = 1000;
+      editor.customConfig.onchangeTimeout = 500;
       // 限制一次最多上传 5 张图片
       editor.customConfig.uploadImgMaxLength = 5;
       // 更改内容
