@@ -5,6 +5,10 @@
         <el-input v-model="data.title" label="标题"></el-input>
       </el-form-item>
       <el-form-item label="缩略图">
+        <el-image
+          class="avatar"
+          fit="contain"
+          :src="data.image_url"></el-image>
         <el-upload
           class="avatar-uploader"
           list-type="picture-card"
@@ -20,7 +24,7 @@
         </el-upload>
       </el-form-item>
       <el-form-item label="内容">
-        <Editor @getEditorContent="getEditorContent"></Editor>
+        <Editor :content="data.content" @getEditorContent="getEditorContent"></Editor>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="handleAdd">添加</el-button>
@@ -60,7 +64,12 @@
         params.article_id = article_id;
         this.$axios.get('/api/admin/article', {params: params})
           .then((res) => {
-            this.data = res.data;
+            if (!res.data.code) {
+              this.data = res.data.data;
+            } else {
+              this.$message.error(res.data.msg);
+              this.$router.push('/admin/article');
+            }
           })
           .catch((err) => {
             console.log(err);
@@ -134,6 +143,11 @@
 </script>
 
 <style scoped>
+  .avatar-uploader {
+    display: inline-block;
+    vertical-align: top;
+  }
+
   .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9;
     border-radius: 6px;
@@ -150,6 +164,16 @@
     font-size: 28px;
     color: #8c939d;
     text-align: center;
+  }
+
+  .avatar {
+    display: inline-block;
+    width: 146px;
+    height: 146px;
+    border: 1px dashed #409EFF;
+    border-radius: 6px;
+    vertical-align: top;
+    margin-right: 10px;
   }
 
   .main {

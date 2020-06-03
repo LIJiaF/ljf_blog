@@ -110,7 +110,7 @@
       getData (cur_page = 1) {
         let params = {};
         params.cur_page = cur_page;
-        this.$axios.get('/api/admin/article', {params: params})
+        this.$axios.get('/api/admin/article/list', {params: params})
           .then((res) => {
             this.table_data = res.data.data;
             this.page_size = res.data.page_size;
@@ -157,7 +157,8 @@
         }).catch(() => {
         });
       },
-      currentChange () {
+      currentChange (cur_page) {
+        this.getData(cur_page);
       }
     }
   }

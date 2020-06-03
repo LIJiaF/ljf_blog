@@ -6,14 +6,10 @@ from model import DBSession, Article
 from config import domain_name
 
 
-class ArticleHandler(RequestHandler):
+class ArticleListHandler(RequestHandler):
     def get(self):
         cur_page = self.get_argument('cur_page', '1')
-        article_id = self.get_argument('article_id', None)
         page_size = 5
-
-        if article_id:
-            pass
 
         sql = """
             select (
@@ -46,6 +42,25 @@ class ArticleHandler(RequestHandler):
             })
 
         self.finish(json.dumps(table_data))
+
+
+class ArticleHandler(RequestHandler):
+    def get(self):
+        article_id = self.get_argument('article_id', None)
+
+        session = DBSession()
+        article = session.query(Article).filter_by(id=article_id).first()
+        if not article:
+            self.finish(json.dumps({'code': -1, 'msg': '该文章不存在'}))
+
+        result = {
+            'id': article.id,
+            'image_url': domain_name + article.image_url,
+            'title': article.title,
+            'content': article.content
+        }
+
+        self.finish(json.dumps({'code': 0, 'data': result}))
 
     def post(self):
         title = self.get_body_argument('title', None)

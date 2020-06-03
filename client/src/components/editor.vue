@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div ref="editor"></div>
+    <div ref="editor">{{content}}</div>
   </div>
 </template>
 
@@ -9,6 +9,7 @@
   import XSS from 'xss';
 
   export default {
+    props: ['content'],
     data () {
       return {
         editorContent: ''

@@ -16,6 +16,7 @@ def make_app():
 
     return Application([
         (r'/admin/article', ArticleHandler),
+        (r'/admin/article/list', ArticleListHandler),
         (r'/upload', UploadHandler),
         (r'/create_table', CreateTableHandler),
         (r'/drop_table', DropTableHandler),
