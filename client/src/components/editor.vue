@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div ref="editor">{{content}}</div>
+    <div ref="editor"></div>
   </div>
 </template>
 
@@ -12,6 +12,7 @@
     props: ['content'],
     data () {
       return {
+        editor: null,
         editorContent: ''
       }
     },
@@ -48,7 +49,15 @@
         this.editorContent = XSS(html);
         this.$emit('getEditorContent', this.editorContent);
       };
-      editor.create()
+      editor.create();
+      this.editor = editor;
+    },
+    watch: {
+      content (con) {
+        console.log(con);
+        // this.editorContent = con;
+        this.editor.txt.html(con)
+      }
     }
   }
 </script>

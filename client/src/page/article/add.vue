@@ -8,6 +8,7 @@
         <el-image
           class="avatar"
           fit="contain"
+          v-if="data.image_url"
           :src="data.image_url"></el-image>
         <el-upload
           class="avatar-uploader"
