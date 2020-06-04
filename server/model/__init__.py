@@ -7,7 +7,7 @@ from .article import Article
 
 # 初始化数据库连接:
 conn_str = 'postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}'.format(**pgsqlConfig)
-engine = create_engine(conn_str, echo=True)
+engine = create_engine(conn_str)
 
 # 创建DBSession类型:
 DBSession = sessionmaker(bind=engine)

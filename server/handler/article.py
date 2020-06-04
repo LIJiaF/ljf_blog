@@ -1,5 +1,6 @@
 from datetime import datetime
 import json
+import os
 
 from tornado.web import RequestHandler
 from model import DBSession, Article
@@ -41,7 +42,7 @@ class ArticleListHandler(RequestHandler):
                 'write_date': d.write_date.strftime('%Y-%m-%d %H:%M:%S'),
             })
 
-        self.finish(json.dumps(table_data))
+        return self.finish(json.dumps(table_data))
 
 
 class ArticleHandler(RequestHandler):
@@ -51,16 +52,16 @@ class ArticleHandler(RequestHandler):
         session = DBSession()
         article = session.query(Article).filter_by(id=article_id).first()
         if not article:
-            self.finish(json.dumps({'code': -1, 'msg': '该文章不存在'}))
+            return self.finish(json.dumps({'code': -1, 'msg': '该文章不存在'}))
 
         result = {
             'id': article.id,
-            'image_url': domain_name + article.image_url,
+            'image_url': (domain_name + article.image_url) if article.image_url else '',
             'title': article.title,
             'content': article.content
         }
 
-        self.finish(json.dumps({'code': 0, 'data': result}))
+        return self.finish(json.dumps({'code': 0, 'data': result}))
 
     def post(self):
         title = self.get_body_argument('title', None)
@@ -85,9 +86,42 @@ class ArticleHandler(RequestHandler):
             session.close()
         except Exception as e:
             print(e)
-            self.finish(json.dumps({'code': -1, 'msg': '添加失败'}))
+            return self.finish(json.dumps({'code': -1, 'msg': '添加失败'}))
 
-        self.finish(json.dumps({'code': 0, 'msg': '添加成功'}))
+        return self.finish(json.dumps({'code': 0, 'msg': '添加成功'}))
+
+    def put(self):
+        article_id = self.get_body_argument('id', None)
+        title = self.get_body_argument('title', None)
+        image_url = self.get_body_argument('image_url', None)
+        content = self.get_body_argument('content', None)
+
+        session = DBSession()
+        article = session.query(Article).filter_by(id=article_id).first()
+        if not article:
+            return self.finish(json.dumps({'code': -1, 'msg': '该文章不存在'}))
+
+        now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        data = {
+            'title': title,
+            'content': content,
+            'write_date': now
+        }
+
+        try:
+            image_url = image_url.lstrip(domain_name)
+            if article.image_url and image_url != article.image_url:
+                os.remove(article.image_url)
+                data['image_url'] = image_url
+
+            session.query(Article).filter_by(id=article_id).update(data)
+            session.commit()
+            session.close()
+        except Exception as e:
+            print(e)
+            return self.finish(json.dumps({'code': -1, 'msg': '修改失败'}))
+
+        return self.finish(json.dumps({'code': 0, 'msg': '修改成功'}))
 
     def delete(self):
         article_id = self.get_argument('article_id', None)
@@ -102,6 +136,6 @@ class ArticleHandler(RequestHandler):
             session.commit()
         except Exception as e:
             print(e)
-            self.finish(json.dumps({'code': -1, 'msg': '删除失败'}))
+            return self.finish(json.dumps({'code': -1, 'msg': '删除失败'}))
 
-        self.finish(json.dumps({'code': 0, 'msg': '删除成功'}))
+        return self.finish(json.dumps({'code': 0, 'msg': '删除成功'}))

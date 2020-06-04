@@ -6,14 +6,12 @@
 
 <script>
   import E from 'wangeditor';
-  import XSS from 'xss';
 
   export default {
     props: ['content'],
     data () {
       return {
         editor: null,
-        editorContent: ''
       }
     },
     mounted () {
@@ -46,17 +44,14 @@
       editor.customConfig.uploadImgMaxLength = 5;
       // 更改内容
       editor.customConfig.onchange = (html) => {
-        this.editorContent = XSS(html);
-        this.$emit('getEditorContent', this.editorContent);
+        this.$emit('getEditorContent', html);
       };
       editor.create();
       this.editor = editor;
     },
     watch: {
-      content (con) {
-        console.log(con);
-        // this.editorContent = con;
-        this.editor.txt.html(con)
+      content (content) {
+        this.editor.txt.html(content);
       }
     }
   }

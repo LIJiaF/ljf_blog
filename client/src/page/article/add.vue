@@ -28,7 +28,8 @@
         <Editor :content="data.content" @getEditorContent="getEditorContent"></Editor>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="handleAdd">添加</el-button>
+        <el-button v-if="!edit" type="primary" @click="handleAdd">添加</el-button>
+        <el-button v-else type="primary" @click="handleAdd">修改</el-button>
         <el-button @click="$router.back(-1)">返回</el-button>
       </el-form-item>
     </el-form>
@@ -42,6 +43,7 @@
     data () {
       return {
         action: 'http://127.0.0.1:8888/upload',
+        edit: false,
         data: {
           title: '',
           image_url: '',
@@ -56,6 +58,7 @@
       let components_name = this.$route.name;
       let article_id = this.$route.params.article_id;
       if (components_name == 'ArticleEdit') {
+        this.edit = true;
         this.getData(article_id);
       }
     },
@@ -91,9 +94,8 @@
         if (this.$refs.upload.uploadFiles.length) {
           this.$refs.upload.submit();
         } else {
-          this.handlesubmit();
+          this.handleSubmit();
         }
-
       },
       handleExceed () {
         this.$message.error('最多只能上传一张图片');
@@ -115,29 +117,47 @@
       handleSuccess (response) {
         if (!response.code) {
           this.data.image_url = response.image_url;
-          this.handlesubmit();
+          this.handleSubmit();
         }
       },
       handleError (err) {
         this.$message.error(JSON.parse(err.message).msg);
       },
-      handlesubmit () {
-        // 添加数据
+      handleSubmit () {
         let data = new FormData();
         data.append('title', this.data.title);
         data.append('image_url', this.data.image_url);
         data.append('content', this.data.content);
-        this.$axios.post('/api/admin/article', data)
-          .then((res) => {
-            if (!res.data.code) {
-              this.$router.push('/admin/article');
-            } else {
-              this.$message.error(res.data.msg);
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          })
+        if (!this.edit) {
+          // 添加数据
+          this.$axios.post('/api/admin/article', data)
+            .then((res) => {
+              if (!res.data.code) {
+                this.$router.push('/admin/article');
+                this.$message.success(res.data.msg);
+              } else {
+                this.$message.error(res.data.msg);
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            })
+        } else {
+          // 修改数据
+          data.append('id', this.data.id);
+          this.$axios.put('/api/admin/article', data)
+            .then((res) => {
+              if (!res.data.code) {
+                this.$router.push('/admin/article');
+                this.$message.success(res.data.msg);
+              } else {
+                this.$message.error(res.data.msg);
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            })
+        }
       }
     }
   }
