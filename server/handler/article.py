@@ -16,8 +16,10 @@ class ArticleListHandler(RequestHandler):
             select (
                 select count(id)
                 from article
-            ) as total, *
-            from article
+            ) as total, 
+            a.id, ac.name, a.image_url, a.title, a.author, a.create_date, a.write_date
+            from article a
+            inner join article_class ac on ac.id = a.class_id
             order by id desc
             limit %d offset %d
         """ % (page_size, (int(cur_page) - 1) * page_size)
@@ -35,6 +37,7 @@ class ArticleListHandler(RequestHandler):
         for d in data:
             table_data['data'].append({
                 'id': d.id,
+                'class_name': d.name,
                 'image_url': domain_name + d.image_url,
                 'title': d.title,
                 'author': d.author,
@@ -56,6 +59,7 @@ class ArticleHandler(RequestHandler):
 
         result = {
             'id': article.id,
+            'class_id': article.class_id,
             'image_url': (domain_name + article.image_url) if article.image_url else '',
             'title': article.title,
             'content': article.content
@@ -64,12 +68,14 @@ class ArticleHandler(RequestHandler):
         return self.finish(json.dumps({'code': 0, 'data': result}))
 
     def post(self):
+        class_id = self.get_body_argument('class_id', None)
         title = self.get_body_argument('title', None)
         image_url = self.get_body_argument('image_url', None)
         content = self.get_body_argument('content', None)
 
         now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         data = {
+            'class_id': class_id,
             'title': title,
             'image_url': image_url,
             'content': content,
@@ -92,6 +98,7 @@ class ArticleHandler(RequestHandler):
 
     def put(self):
         article_id = self.get_body_argument('article_id', None)
+        class_id = self.get_body_argument('class_id', None)
         title = self.get_body_argument('title', None)
         image_url = self.get_body_argument('image_url', None)
         content = self.get_body_argument('content', None)
@@ -103,6 +110,7 @@ class ArticleHandler(RequestHandler):
 
         now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         data = {
+            'class_id': class_id,
             'title': title,
             'content': content,
             'write_date': now
@@ -110,9 +118,10 @@ class ArticleHandler(RequestHandler):
 
         try:
             image_url = image_url.lstrip(domain_name)
-            if article.image_url and image_url != article.image_url:
-                os.remove(article.image_url)
+            if image_url != article.image_url:
                 data['image_url'] = image_url
+                if article.image_url:
+                    os.remove(article.image_url)
 
             session.query(Article).filter_by(id=article_id).update(data)
             session.commit()

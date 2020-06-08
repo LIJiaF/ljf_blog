@@ -27,6 +27,12 @@
       <el-table-column
         align="center"
         fixed="left"
+        prop="class_name"
+        label="分类">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        fixed="left"
         label="缩略图">
         <template slot-scope="scope">
           <el-image

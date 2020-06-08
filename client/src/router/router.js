@@ -35,6 +35,7 @@ export default new Router({
         {
           path: 'article/class/edit/:class_id',
           name: 'ArticleClassEdit',
+          props: true,
           component: ArticleClassAdd,
           meta: {
             menu: 'article_class'
@@ -59,6 +60,7 @@ export default new Router({
         {
           path: 'article/edit/:article_id',
           name: 'ArticleEdit',
+          props: true,
           component: ArticleAdd,
           meta: {
             menu: 'article'

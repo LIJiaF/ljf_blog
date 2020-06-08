@@ -15,6 +15,7 @@
 
 <script>
   export default {
+    props: ['class_id'],
     data () {
       return {
         edit: false,
@@ -25,10 +26,9 @@
     },
     created () {
       let components_name = this.$route.name;
-      let class_id = this.$route.params.class_id;
       if (components_name == 'ArticleClassEdit') {
         this.edit = true;
-        this.getData(class_id);
+        this.getData(this.class_id);
       }
     },
     methods: {

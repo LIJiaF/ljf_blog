@@ -1,6 +1,16 @@
 <template>
   <div class="main">
     <el-form ref="form" :model="data" label-width="82px">
+      <el-form-item label="分类">
+        <el-select v-model="data.class_id" placeholder="请选择">
+          <el-option
+            v-for="item in article_class"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="标题">
         <el-input v-model="data.title" label="标题"></el-input>
       </el-form-item>
@@ -40,11 +50,14 @@
   import Editor from '@/components/editor'
 
   export default {
+    props: ['article_id'],
     data () {
       return {
         action: 'http://127.0.0.1:8888/upload',
         edit: false,
+        article_class: [],
         data: {
+          class_id: null,
           title: '',
           image_url: '',
           content: ''
@@ -55,14 +68,25 @@
       Editor
     },
     created () {
+      // 获取分类
+      this.getClassData();
+      // 判断是否是修改
       let components_name = this.$route.name;
-      let article_id = this.$route.params.article_id;
       if (components_name == 'ArticleEdit') {
         this.edit = true;
-        this.getData(article_id);
+        this.getData(this.article_id);
       }
     },
     methods: {
+      getClassData () {
+        this.$axios.get('/api/admin/article/class/all')
+          .then((res) => {
+            this.article_class = res.data;
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+      },
       getData (article_id) {
         let params = {};
         params.article_id = article_id;
@@ -83,6 +107,10 @@
         this.data.content = content;
       },
       handleAdd () {
+        if (!this.data.class_id) {
+          this.$message.error('分类不能为空');
+          return false;
+        }
         if (!this.data.title) {
           this.$message.error('标题不能为空');
           return false;
@@ -125,6 +153,7 @@
       },
       handleSubmit () {
         let data = new FormData();
+        data.append('class_id', this.data.class_id);
         data.append('title', this.data.title);
         data.append('image_url', this.data.image_url);
         data.append('content', this.data.content);

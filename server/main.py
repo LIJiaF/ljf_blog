@@ -20,6 +20,7 @@ def make_app():
     return Application([
         (r'/admin/article/class', ArticleClassHandler),
         (r'/admin/article/class/list', ArticleClassListHandler),
+        (r'/admin/article/class/all', ArticleClassAllHandler),
         (r'/admin/article', ArticleHandler),
         (r'/admin/article/list', ArticleListHandler),
         (r'/upload', UploadHandler),

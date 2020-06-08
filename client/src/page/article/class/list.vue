@@ -102,7 +102,7 @@
       },
       handleSearch () {
       },
-      handleDelete (article_id) {
+      handleDelete (class_id) {
         this.$confirm('此操作将永久删除该分类, 是否继续?', '提示', {
           cancelButtonText: '取消',
           confirmButtonText: '确定',
@@ -110,7 +110,7 @@
           center: true
         }).then(() => {
           let params = {};
-          params.article_id = article_id;
+          params.class_id = class_id;
           this.$axios.delete('/api/admin/article/class', {params: params})
             .then((res) => {
               if (!res.data.code) {

@@ -5,6 +5,21 @@ from tornado.web import RequestHandler
 from model import DBSession, ArticleClass
 
 
+class ArticleClassAllHandler(RequestHandler):
+    def get(self):
+        session = DBSession()
+        data = session.query(ArticleClass).all()
+
+        result = []
+        for d in data:
+            result.append({
+                'id': d.id,
+                'name': d.name
+            })
+
+        return self.finish(json.dumps(result))
+
+
 class ArticleClassListHandler(RequestHandler):
     def get(self):
         cur_page = self.get_argument('cur_page', '1')
@@ -84,8 +99,8 @@ class ArticleClassHandler(RequestHandler):
         name = self.get_body_argument('name', None)
 
         session = DBSession()
-        article = session.query(ArticleClass).filter_by(id=class_id).first()
-        if not article:
+        article_class = session.query(ArticleClass).filter_by(id=class_id).first()
+        if not article_class:
             return self.finish(json.dumps({'code': -1, 'msg': '该分类不存在'}))
 
         now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -108,8 +123,8 @@ class ArticleClassHandler(RequestHandler):
         class_id = self.get_argument('class_id', None)
 
         session = DBSession()
-        article = session.query(ArticleClass).filter_by(id=class_id).first()
-        if not article:
+        article_class = session.query(ArticleClass).filter_by(id=class_id).first()
+        if not article_class:
             return self.finish(json.dumps({'code': -1, 'msg': '删除失败'}))
 
         try:
