@@ -21,6 +21,9 @@
               <i class="el-icon-document"></i>
               <span>文章管理</span>
             </template>
+            <router-link to="/admin/article/class">
+              <el-menu-item index="article_class">分类列表</el-menu-item>
+            </router-link>
             <router-link to="/admin/article">
               <el-menu-item index="article">文章列表</el-menu-item>
             </router-link>
@@ -52,7 +55,7 @@
       }
     },
     created () {
-      this.activeIndex = this.$route.path.split('/')[2];
+      this.activeIndex = this.$route.meta.menu;
     },
   }
 </script>

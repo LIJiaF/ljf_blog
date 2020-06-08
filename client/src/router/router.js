@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 const Index = () => import('@/page/index.vue');
+const ArticleClassList = () => import('@/page/article/class/list.vue');
+const ArticleClassAdd = () => import('@/page/article/class/add.vue');
 const ArticleList = () => import('@/page/article/list.vue');
 const ArticleAdd = () => import('@/page/article/add.vue');
 
@@ -15,19 +17,52 @@ export default new Router({
       component: Index,
       children: [
         {
+          path: 'article/class',
+          name: 'ArticleClassList',
+          component: ArticleClassList,
+          meta: {
+            menu: 'article_class'
+          }
+        },
+        {
+          path: 'article/class/add',
+          name: 'ArticleClassAdd',
+          component: ArticleClassAdd,
+          meta: {
+            menu: 'article_class'
+          }
+        },
+        {
+          path: 'article/class/edit/:class_id',
+          name: 'ArticleClassEdit',
+          component: ArticleClassAdd,
+          meta: {
+            menu: 'article_class'
+          }
+        },
+        {
           path: 'article',
           name: 'ArticleList',
-          component: ArticleList
+          component: ArticleList,
+          meta: {
+            menu: 'article'
+          }
         },
         {
           path: 'article/add',
           name: 'ArticleAdd',
-          component: ArticleAdd
+          component: ArticleAdd,
+          meta: {
+            menu: 'article'
+          }
         },
         {
           path: 'article/edit/:article_id',
           name: 'ArticleEdit',
-          component: ArticleAdd
+          component: ArticleAdd,
+          meta: {
+            menu: 'article'
+          }
         },
         {
           path: 'user',

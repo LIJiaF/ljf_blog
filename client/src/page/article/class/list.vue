@@ -4,13 +4,13 @@
     <div class="banner">
       <el-row type="flex">
         <el-col :md="2">
-          <router-link to="/admin/article/add">
+          <router-link to="/admin/article/class/add">
             <el-button size="medium" type="primary" style="margin-left: 10px;">创建</el-button>
           </router-link>
         </el-col>
         <el-col :md="6" :offset="12">
           <el-input
-            placeholder="搜索文章"
+            placeholder="搜索分类"
             prefix-icon="el-icon-search"
             v-model="search_val">
           </el-input>
@@ -27,28 +27,8 @@
       <el-table-column
         align="center"
         fixed="left"
-        label="缩略图">
-        <template slot-scope="scope">
-          <el-image
-            style="width: 60px; height: 60px"
-            :src="scope.row.image_url"
-            fit="contain">
-            <div slot="placeholder" class="load_image">
-              <i class="el-icon-loading"></i>
-            </div>
-          </el-image>
-        </template>
-      </el-table-column>
-      <el-table-column
-        align="center"
-        fixed="left"
-        prop="title"
-        label="标题">
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="author"
-        label="作者">
+        prop="name"
+        label="名称">
       </el-table-column>
       <el-table-column
         align="center"
@@ -67,7 +47,7 @@
         label="操作">
         <template slot-scope="scope">
           <div>
-            <router-link :to="{name: 'ArticleEdit', params: {article_id: scope.row.id}}">
+            <router-link :to="{name: 'ArticleClassEdit', params: {class_id: scope.row.id}}">
               <el-button
                 type="text">编辑
               </el-button>
@@ -110,7 +90,7 @@
       getData (cur_page = 1) {
         let params = {};
         params.cur_page = cur_page;
-        this.$axios.get('/api/admin/article/list', {params: params})
+        this.$axios.get('/api/admin/article/class/list', {params: params})
           .then((res) => {
             this.table_data = res.data.data;
             this.page_size = res.data.page_size;
@@ -123,7 +103,7 @@
       handleSearch () {
       },
       handleDelete (article_id) {
-        this.$confirm('此操作将永久删除该文章, 是否继续?', '提示', {
+        this.$confirm('此操作将永久删除该分类, 是否继续?', '提示', {
           cancelButtonText: '取消',
           confirmButtonText: '确定',
           type: 'warning',
@@ -131,7 +111,7 @@
         }).then(() => {
           let params = {};
           params.article_id = article_id;
-          this.$axios.delete('/api/admin/article', {params: params})
+          this.$axios.delete('/api/admin/article/class', {params: params})
             .then((res) => {
               if (!res.data.code) {
                 if (this.cur_page > 1 && this.table_data.length <= ((this.cur_page - 1) * this.page_size) + 1) {

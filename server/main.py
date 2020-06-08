@@ -1,6 +1,9 @@
 from tornado.ioloop import IOLoop
 from tornado.web import Application, StaticFileHandler
 
+import os
+
+from config import images_dir
 from handler import *
 
 
@@ -15,6 +18,8 @@ def make_app():
     }
 
     return Application([
+        (r'/admin/article/class', ArticleClassHandler),
+        (r'/admin/article/class/list', ArticleClassListHandler),
         (r'/admin/article', ArticleHandler),
         (r'/admin/article/list', ArticleListHandler),
         (r'/upload', UploadHandler),

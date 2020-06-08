@@ -144,7 +144,7 @@
             })
         } else {
           // 修改数据
-          data.append('id', this.data.id);
+          data.append('article_id', this.data.id);
           this.$axios.put('/api/admin/article', data)
             .then((res) => {
               if (!res.data.code) {
