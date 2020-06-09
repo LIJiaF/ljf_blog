@@ -45,4 +45,4 @@ class UploadHandler(BaseHandler):
                 except Exception as e:
                     return self.return_msg('文件上传失败')
 
-            return self.return_msg('文件上传成功', 0, image_url='/'.join([images_dir, filename]))
+            return self.return_msg('文件上传成功', 0, image_url='/'.join(['article', images_dir, filename]))

@@ -34,6 +34,9 @@
           <i class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
       </el-form-item>
+      <el-form-item label="描述">
+        <el-input type="textarea" v-model="data.note" label="描述" :rows="2" resize="none"></el-input>
+      </el-form-item>
       <el-form-item label="内容">
         <Editor :content="data.content" @getEditorContent="getEditorContent"></Editor>
       </el-form-item>
@@ -60,6 +63,7 @@
           class_id: null,
           title: '',
           image_url: '',
+          note: '',
           content: ''
         }
       }
@@ -156,6 +160,7 @@
         data.append('class_id', this.data.class_id);
         data.append('title', this.data.title);
         data.append('image_url', this.data.image_url);
+        data.append('note', this.data.note);
         data.append('content', this.data.content);
         if (!this.edit) {
           // 添加数据

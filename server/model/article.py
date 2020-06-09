@@ -9,6 +9,7 @@ class Article(Base):
     image_url = Column(String)
     title = Column(String)
     author = Column(String)
+    note = Column(String)
     content = Column(Text)
     class_id = Column(Integer, ForeignKey('article_class.id'))
     create_date = Column(DateTime)

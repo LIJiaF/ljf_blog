@@ -62,6 +62,7 @@ class ArticleHandler(RequestHandler):
             'class_id': article.class_id,
             'image_url': (domain_name + article.image_url) if article.image_url else '',
             'title': article.title,
+            'note': article.note,
             'content': article.content
         }
 
@@ -71,6 +72,7 @@ class ArticleHandler(RequestHandler):
         class_id = self.get_body_argument('class_id', None)
         title = self.get_body_argument('title', None)
         image_url = self.get_body_argument('image_url', None)
+        note = self.get_body_argument('note', None)
         content = self.get_body_argument('content', None)
 
         now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -78,6 +80,7 @@ class ArticleHandler(RequestHandler):
             'class_id': class_id,
             'title': title,
             'image_url': image_url,
+            'note': note,
             'content': content,
             'author': 'LiJiaF',
             'create_date': now,
@@ -101,6 +104,7 @@ class ArticleHandler(RequestHandler):
         class_id = self.get_body_argument('class_id', None)
         title = self.get_body_argument('title', None)
         image_url = self.get_body_argument('image_url', None)
+        note = self.get_body_argument('note', None)
         content = self.get_body_argument('content', None)
 
         session = DBSession()
@@ -112,6 +116,7 @@ class ArticleHandler(RequestHandler):
         data = {
             'class_id': class_id,
             'title': title,
+            'note': note,
             'content': content,
             'write_date': now
         }
