@@ -100,15 +100,7 @@ jQuery.ias({
     next: '.next-page a',
     trigger: '查看更多',
     loader: '<div class="pagination-loading"><img src="images/loading.gif" /></div>',
-    triggerPageThreshold: 5,
-    onRenderComplete: function () {
-        $('.excerpt .thumb').lazyload({
-            placeholder: '../images/occupying.png',
-            threshold: 400
-        });
-        $('.excerpt img').attr('draggable', 'false');
-        $('.excerpt a').attr('draggable', 'false')
-    }
+    triggerPageThreshold: 1
 });
 $(window).scroll(function () {
     var sidebar = $('.sidebar');

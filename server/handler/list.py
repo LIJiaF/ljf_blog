@@ -1,9 +1,9 @@
 from tornado.web import RequestHandler
-from model import DBSession, ArticleClass
+from model import DBSession
 from config import domain_name
 
 
-class MainHandler(RequestHandler):
+class ListHandler(RequestHandler):
     def get(self):
         cur_page = self.get_argument('page', '1')
         page_size = 5
@@ -16,6 +16,10 @@ class MainHandler(RequestHandler):
             limit %d offset %d
         """ % (page_size, (int(cur_page) - 1) * page_size)
 
+        session = DBSession()
+        cursor = session.execute(new_sql)
+        new_data = cursor.fetchall()
+
         hot_sql = """
             select a.id, ac.name, a.image_url, a.title, a.author, a.note, a.create_date, a.write_date
             from article a
@@ -25,14 +29,8 @@ class MainHandler(RequestHandler):
             limit 5
         """
 
-        session = DBSession()
-        cursor = session.execute(new_sql)
-        new_data = cursor.fetchall()
-
         cursor = session.execute(hot_sql)
         hot_data = cursor.fetchall()
-
-        class_data = session.query(ArticleClass).order_by(ArticleClass.id.asc()).all()
 
         new_result = []
         for d in new_data:
@@ -66,18 +64,5 @@ class MainHandler(RequestHandler):
                 'write_date': d.write_date.strftime('%Y-%m-%d %H:%M:%S'),
             })
 
-        class_result = []
-        for d in class_data:
-            class_result.append({
-                'id': str(d.id),
-                'name': d.name
-            })
-
         next_page = str(int(cur_page) + 1)
-        data = {
-            'class_data': class_result,
-            'new_data': new_result,
-            'hot_data': hot_result,
-            'next_page': next_page
-        }
-        self.render("index.html", data=data)
+        self.render("list.html", new_data=new_result, hot_data=hot_result, next_page=next_page)

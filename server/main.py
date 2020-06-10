@@ -24,7 +24,8 @@ def make_app():
         (r'/admin/article', ArticleHandler),
         (r'/admin/article/list', ArticleListHandler),
 
-        (r'/article', MainHandler),
+        (r'/', MainHandler),
+        (r'/list', ListHandler),
 
         (r'/upload', UploadHandler),
         (r'/create_table', CreateTableHandler),
