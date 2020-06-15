@@ -1,12 +1,12 @@
 from tornado.web import RequestHandler
-from model import DBSession, ArticleClass
+from model import DBSession
 from config import domain_name
 
 
 class MainHandler(RequestHandler):
     def get(self):
         cur_page = self.get_argument('page', '1')
-        page_size = 5
+        page_size = 10
 
         new_sql = """
             select a.id, ac.name, a.image_url, a.title, a.author, a.note, a.create_date, a.write_date
@@ -25,6 +25,13 @@ class MainHandler(RequestHandler):
             limit 5
         """
 
+        class_sql = """
+            select ac.id, ac.name
+            from article_class as ac
+            where ac.id in (select distinct class_id from article)
+            order by ac.id
+        """
+
         session = DBSession()
         cursor = session.execute(new_sql)
         new_data = cursor.fetchall()
@@ -32,7 +39,8 @@ class MainHandler(RequestHandler):
         cursor = session.execute(hot_sql)
         hot_data = cursor.fetchall()
 
-        class_data = session.query(ArticleClass).order_by(ArticleClass.id.asc()).all()
+        cursor = session.execute(class_sql)
+        class_data = cursor.fetchall()
 
         new_result = []
         for d in new_data:
@@ -69,7 +77,7 @@ class MainHandler(RequestHandler):
         class_result = []
         for d in class_data:
             class_result.append({
-                'id': str(d.id),
+                'id': d.id,
                 'name': d.name
             })
 

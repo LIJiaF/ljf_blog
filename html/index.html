@@ -28,7 +28,7 @@
             <!-- logo -->
             <div class="navbar-header">
                 <h1 class="logo hvr-bounce-in">
-                    <a href="javascript:;" title="李家富博客"><img src="images/logo.png" alt="李家富博客"></a>
+                    <a href="/" title="李家富博客"><img src="images/logo.png" alt="李家富博客"></a>
                 </h1>
             </div>
             <!-- 菜单 -->
@@ -36,7 +36,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li><a data-cont="李家富博客" title="李家富博客" href="/">首页</a></li>
                     {% for d in data['class_data'] %}
-                    <li><a href="/list?class={{ escape(d['id']) }}">{{ escape(d['name']) }}</a></li>
+                    <li><a href="/list?class={{ d['id'] }}">{{ escape(d['name']) }}</a></li>
                     {% end %}
                 </ul>
             </div>
@@ -139,7 +139,7 @@
             <!--</div>-->
         </div>
         <div class="widget widget_hot">
-            <h3>最新评论文章</h3>
+            <h3>热门文章</h3>
             <ul>
                 {% for d in data['hot_data'] %}
                 <li>

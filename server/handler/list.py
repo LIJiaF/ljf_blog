@@ -6,19 +6,17 @@ from config import domain_name
 class ListHandler(RequestHandler):
     def get(self):
         cur_page = self.get_argument('page', '1')
-        page_size = 5
+        cur_class = self.get_argument('class', None)
+        page_size = 10
 
         new_sql = """
             select a.id, ac.name, a.image_url, a.title, a.author, a.note, a.create_date, a.write_date
             from article a
             inner join article_class ac on ac.id = a.class_id
+            where ac.id = %d
             order by id desc
             limit %d offset %d
-        """ % (page_size, (int(cur_page) - 1) * page_size)
-
-        session = DBSession()
-        cursor = session.execute(new_sql)
-        new_data = cursor.fetchall()
+        """ % (int(cur_class), page_size, (int(cur_page) - 1) * page_size)
 
         hot_sql = """
             select a.id, ac.name, a.image_url, a.title, a.author, a.note, a.create_date, a.write_date
@@ -29,8 +27,27 @@ class ListHandler(RequestHandler):
             limit 5
         """
 
+        class_sql = """
+            with cla_count as (
+                select class_id, count(id) as total
+                from article
+                group by class_id
+            )
+            select ac.id, ac.name, cc.total
+            from article_class as ac
+            inner join cla_count as cc on cc.class_id = ac.id
+            order by ac.id
+        """
+
+        session = DBSession()
+        cursor = session.execute(new_sql)
+        new_data = cursor.fetchall()
+
         cursor = session.execute(hot_sql)
         hot_data = cursor.fetchall()
+
+        cursor = session.execute(class_sql)
+        class_data = cursor.fetchall()
 
         new_result = []
         for d in new_data:
@@ -64,5 +81,20 @@ class ListHandler(RequestHandler):
                 'write_date': d.write_date.strftime('%Y-%m-%d %H:%M:%S'),
             })
 
+        class_result = []
+        for d in class_data:
+            class_result.append({
+                'id': d.id,
+                'name': d.name,
+                'total': d.total
+            })
+
         next_page = str(int(cur_page) + 1)
-        self.render("list.html", new_data=new_result, hot_data=hot_result, next_page=next_page)
+        data = {
+            'class_data': class_result,
+            'new_data': new_result,
+            'hot_data': hot_result,
+            'next_page': next_page,
+            'cur_class': cur_class
+        }
+        self.render("list.html", data=data)
