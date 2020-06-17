@@ -3,12 +3,11 @@ from model import DBSession
 from config import domain_name
 
 
-class ListHandler(RequestHandler):
-    def get(self, class_id):
+class ShowHandler(RequestHandler):
+    def get(self, article_id):
         cur_page = self.get_argument('page', '1')
+        cur_class = self.get_argument('class', '0')
         page_size = 10
-
-        class_id = int(class_id) if class_id else -1
 
         new_sql = """
             select a.id, ac.name, a.image_url, a.title, a.author, a.note, a.create_date, a.write_date
@@ -17,7 +16,7 @@ class ListHandler(RequestHandler):
             where ac.id = %d
             order by id desc
             limit %d offset %d
-        """ % (class_id, page_size, (int(cur_page) - 1) * page_size)
+        """ % (int(cur_class), page_size, (int(cur_page) - 1) * page_size)
 
         hot_sql = """
             select a.id, ac.name, a.image_url, a.title, a.author, a.note, a.create_date, a.write_date
@@ -90,12 +89,12 @@ class ListHandler(RequestHandler):
                 'total': d.total
             })
 
-        next_page = int(cur_page) + 1
+        next_page = str(int(cur_page) + 1)
         data = {
             'class_data': class_result,
             'new_data': new_result,
             'hot_data': hot_result,
             'next_page': next_page,
-            'cur_class': class_id
+            'cur_class': cur_class
         }
-        self.render("list.html", data=data)
+        self.render("show.html", data=data)

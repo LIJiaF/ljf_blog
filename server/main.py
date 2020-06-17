@@ -15,6 +15,7 @@ def make_app():
     setting = {
         'debug': True,
         'template_path': '../html',
+        'static_path': '../html'
     }
 
     return Application([
@@ -25,7 +26,8 @@ def make_app():
         (r'/admin/article/list', ArticleListHandler),
 
         (r'/', MainHandler),
-        (r'/list', ListHandler),
+        (r'/list/?(?P<class_id>\d*)', ListHandler),
+        (r'/show/?(?P<article_id>\d*)', ShowHandler),
 
         (r'/upload', UploadHandler),
         (r'/create_table', CreateTableHandler),

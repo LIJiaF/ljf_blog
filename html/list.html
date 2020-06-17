@@ -5,26 +5,24 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>list</title>
+    {% if data['new_data'] %}
+    <title>{{ data['new_data'][0]['class_name'] }}</title>
+    {% else %}
+    <title>博客列表页</title>
+    {% end %}
     <meta name="keywords" content="">
     <meta name="description" content="">
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="css/nprogress.css">
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
-    <link rel="apple-touch-icon-precomposed" href="images/icon.png">
-    <link rel="shortcut icon" href="images/favicon.ico">
-    <script src="js/jquery-2.1.4.min.js"></script>
-    <script src="js/nprogress.js"></script>
-    <script src="js/jquery.lazyload.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ static_url('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ static_url('css/style.css') }}">
+    <link rel="shortcut icon" href="{{ static_url('images/favicon.ico') }}">
+    <script src="{{ static_url('js/jquery-2.1.4.min.js') }}"></script>
+    <script src="{{ static_url('js/nprogress.js') }}"></script>
+    <script src="{{ static_url('js/jquery.lazyload.min.js') }}"></script>
     <!--[if gte IE 9]>
-    <script src="js/jquery-1.11.1.min.js" type="text/javascript"></script>
-    <script src="js/html5shiv.min.js" type="text/javascript"></script>
-    <script src="js/respond.min.js" type="text/javascript"></script>
-    <script src="js/selectivizr-min.js" type="text/javascript"></script>
-    <![endif]-->
-    <!--[if lt IE 9]>
-    <script>window.location.href = 'upgrade-browser.html';</script>
+    <script src="{{ static_url('js/jquery-1.11.1.min.js') }}" type="text/javascript"></script>
+    <script src="{{ static_url('js/html5shiv.min.js') }}" type="text/javascript"></script>
+    <script src="{{ static_url('js/respond.min.js') }}" type="text/javascript"></script>
+    <script src="{{ static_url('js/selectivizr-min.js') }}" type="text/javascript"></script>
     <![endif]-->
 </head>
 <body class="user-select">
@@ -34,7 +32,7 @@
             <!-- logo -->
             <div class="navbar-header">
                 <h1 class="logo hvr-bounce-in">
-                    <a href="/" title="李家富博客"><img src="images/logo.png" alt="李家富博客"></a>
+                    <a href="/" title="李家富博客"><img src="{{ static_url('images/logo.png') }}" alt="李家富博客"></a>
                 </h1>
             </div>
             <!-- 菜单 -->
@@ -42,7 +40,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li><a data-cont="李家富博客" title="李家富博客" href="/">首页</a></li>
                     {% for d in data['class_data'] %}
-                    <li><a href="/list?class={{ d['id'] }}">{{ escape(d['name']) }}</a></li>
+                    <li><a href="/list/{{ d['id'] }}">{{ escape(d['name']) }}</a></li>
                     {% end %}
                 </ul>
             </div>
@@ -87,7 +85,7 @@
             <nav class="pagination" style="display: none;">
                 <ul>
                     <li class="next-page">
-                        <a href="?class={{ escape(data['cur_class']) }}&page={{ escape(data['next_page']) }}">下一页</a>
+                        <a href="/list/{{ data['cur_class'] }}?page={{ data['next_page'] }}">下一页</a>
                     </li>
                 </ul>
             </nav>
@@ -112,7 +110,7 @@
                     <ul class="plinks ptags">
                         {% for d in data['class_data'] %}
                         <li>
-                            <a href="/list?class={{ d['id'] }}" title="{{ d['name'] }}" draggable="false">
+                            <a href="/list/{{ d['id'] }}" title="{{ d['name'] }}" draggable="false">
                                 {{ escape(d['name']) }} <span class="badge">{{ d['total'] }}</span>
                             </a>
                         </li>
@@ -156,8 +154,8 @@
         <p>李家富博客</p>
     </div>
 </footer>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/jquery.ias.js"></script>
-<script src="js/scripts.js"></script>
+<script src="{{ static_url('js/bootstrap.min.js') }}"></script>
+<script src="{{ static_url('js/jquery.ias.js') }}"></script>
+<script src="{{ static_url('js/scripts.js') }}"></script>
 </body>
 </html>

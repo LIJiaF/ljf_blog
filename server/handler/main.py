@@ -81,7 +81,7 @@ class MainHandler(RequestHandler):
                 'name': d.name
             })
 
-        next_page = str(int(cur_page) + 1)
+        next_page = int(cur_page) + 1
         data = {
             'class_data': class_result,
             'new_data': new_result,

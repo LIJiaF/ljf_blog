@@ -99,7 +99,7 @@ jQuery.ias({
     pagination: '.pagination',
     next: '.next-page a',
     trigger: '查看更多',
-    loader: '<div class="pagination-loading"><img src="images/loading.gif" /></div>',
+    loader: '<div class="pagination-loading"><img src="/images/loading.gif" /></div>',
     triggerPageThreshold: 1
 });
 $(window).scroll(function () {
