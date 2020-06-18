@@ -11,7 +11,7 @@ class ListHandler(RequestHandler):
         class_id = int(class_id) if class_id else -1
 
         new_sql = """
-            select a.id, ac.name, a.image_url, a.title, a.author, a.note, a.create_date, a.write_date
+            select a.id, a.class_id, ac.name, a.image_url, a.title, a.author, a.note, a.write_date
             from article a
             inner join article_class ac on ac.id = a.class_id
             where ac.id = %d
@@ -20,7 +20,7 @@ class ListHandler(RequestHandler):
         """ % (class_id, page_size, (int(cur_page) - 1) * page_size)
 
         hot_sql = """
-            select a.id, ac.name, a.image_url, a.title, a.author, a.note, a.create_date, a.write_date
+            select a.id, ac.name, a.image_url, a.title, a.author, a.note, a.write_date
             from article a
             inner join article_class ac on ac.id = a.class_id
             where ac.id = 1
@@ -57,12 +57,12 @@ class ListHandler(RequestHandler):
                 image_url = 'article/images/default.png'
             new_result.append({
                 'id': d.id,
+                'class_id': d.class_id,
                 'class_name': d.name,
                 'image_url': domain_name + image_url,
                 'title': d.title,
                 'author': d.author,
                 'note': d.note,
-                'create_date': d.create_date.strftime('%Y-%m-%d %H:%M:%S'),
                 'write_date': d.write_date.strftime('%Y-%m-%d %H:%M:%S'),
             })
 
@@ -78,7 +78,6 @@ class ListHandler(RequestHandler):
                 'title': d.title,
                 'author': d.author,
                 'note': d.note,
-                'create_date': d.create_date.strftime('%Y-%m-%d %H:%M:%S'),
                 'write_date': d.write_date.strftime('%Y-%m-%d %H:%M:%S'),
             })
 

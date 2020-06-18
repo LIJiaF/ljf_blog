@@ -7,19 +7,16 @@ class ShowHandler(RequestHandler):
     def get(self, article_id):
         cur_page = self.get_argument('page', '1')
         cur_class = self.get_argument('class', '0')
-        page_size = 10
 
         new_sql = """
-            select a.id, ac.name, a.image_url, a.title, a.author, a.note, a.create_date, a.write_date
+            select a.id, a.class_id, ac.name, a.title, a.author, a.note, a.content, a.write_date
             from article a
             inner join article_class ac on ac.id = a.class_id
-            where ac.id = %d
-            order by id desc
-            limit %d offset %d
-        """ % (int(cur_class), page_size, (int(cur_page) - 1) * page_size)
+            where a.id = %d
+        """ % int(article_id)
 
         hot_sql = """
-            select a.id, ac.name, a.image_url, a.title, a.author, a.note, a.create_date, a.write_date
+            select a.id, ac.name, a.image_url, a.title, a.author, a.note, a.write_date
             from article a
             inner join article_class ac on ac.id = a.class_id
             where ac.id = 1
@@ -49,21 +46,18 @@ class ShowHandler(RequestHandler):
         cursor = session.execute(class_sql)
         class_data = cursor.fetchall()
 
-        new_result = []
+        new_result = {}
         for d in new_data:
-            image_url = d.image_url
-            if not image_url:
-                image_url = 'article/images/default.png'
-            new_result.append({
+            new_result = {
                 'id': d.id,
+                'class_id': d.class_id,
                 'class_name': d.name,
-                'image_url': domain_name + image_url,
                 'title': d.title,
                 'author': d.author,
                 'note': d.note,
-                'create_date': d.create_date.strftime('%Y-%m-%d %H:%M:%S'),
+                'content': d.content,
                 'write_date': d.write_date.strftime('%Y-%m-%d %H:%M:%S'),
-            })
+            }
 
         hot_result = []
         for d in hot_data:
@@ -77,7 +71,6 @@ class ShowHandler(RequestHandler):
                 'title': d.title,
                 'author': d.author,
                 'note': d.note,
-                'create_date': d.create_date.strftime('%Y-%m-%d %H:%M:%S'),
                 'write_date': d.write_date.strftime('%Y-%m-%d %H:%M:%S'),
             })
 
@@ -93,8 +86,6 @@ class ShowHandler(RequestHandler):
         data = {
             'class_data': class_result,
             'new_data': new_result,
-            'hot_data': hot_result,
-            'next_page': next_page,
-            'cur_class': cur_class
+            'hot_data': hot_result
         }
         self.render("show.html", data=data)

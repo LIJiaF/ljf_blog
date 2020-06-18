@@ -914,6 +914,7 @@ body, input, button, textarea, select {
     line-height: 25px;
     word-wrap: break-word;
     cursor: default;
+    min-height: 500px;
 }
 
 .article-content img {

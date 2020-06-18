@@ -73,20 +73,21 @@
             <!-- 文章列表 -->
             {% for d in data['new_data'] %}
             <article class="excerpt">
-                <a class="focus" href="#" title="{{ escape(d['title']) }}" target="_blank">
+                <a class="focus" href="/show/{{ d['id'] }}" title="{{ escape(d['title']) }}" target="_blank">
                     <img class="thumb" src="{{ escape(d['image_url']) }}" alt="{{ escape(d['title']) }}">
                 </a>
                 <header>
-                    <a class="cat" href="#" title="{{ escape(d['class_name']) }}">{{ escape(d['class_name'])
-                        }}<i></i></a>
+                    <a class="cat" href="/list/{{ d['class_id'] }}" title="{{ escape(d['class_name']) }}" target="_blank">
+                        {{ escape(d['class_name']) }}<i></i>
+                    </a>
                     <h2>
-                        <a href="#" title="{{ escape(d['title']) }}" target="_blank">
+                        <a href="/show/{{ d['id'] }}" title="{{ escape(d['title']) }}" target="_blank">
                             {{ escape(d['title']) }}
                         </a>
                     </h2>
                 </header>
                 <p class="meta">
-                    <time class="time"><i class="glyphicon glyphicon-time"></i> {{ escape(d['create_date']) }}</time>
+                    <time class="time"><i class="glyphicon glyphicon-time"></i> {{ escape(d['write_date']) }}</time>
                     <!--<span class="views"><i class="glyphicon glyphicon-eye-open"></i> 216</span>-->
                     <!--<a class="comment" href="##comment" title="评论" target="_blank">-->
                     <!--<i class="glyphicon glyphicon-comment"></i> 4-->
@@ -143,14 +144,14 @@
             <ul>
                 {% for d in data['hot_data'] %}
                 <li>
-                    <a title="{{ escape(d['title']) }}" href="#">
+                    <a title="{{ escape(d['title']) }}" href="/show/{{ d['id'] }}" target="_blank">
                         <span class="thumbnail">
 				            <img class="thumb" src="{{ escape(d['image_url']) }}" alt="{{ escape(d['title']) }}"
                                  style="display: block;">
 			            </span>
                         <span class="text">{{ escape(d['title']) }}</span>
                         <span class="muted">
-                            <i class="glyphicon glyphicon-time"></i> {{ escape(d['create_date']) }}
+                            <i class="glyphicon glyphicon-time"></i> {{ escape(d['write_date']) }}
                         </span>
                         <!--<span class="muted">-->
                         <!--<i class="glyphicon glyphicon-eye-open"></i> 88-->
