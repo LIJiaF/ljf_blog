@@ -3,6 +3,7 @@ import json
 
 from tornado.web import RequestHandler
 from model import DBSession, ArticleClass
+from common import log
 
 
 class ArticleClassAllHandler(RequestHandler):
@@ -24,6 +25,8 @@ class ArticleClassListHandler(RequestHandler):
     def get(self):
         cur_page = self.get_argument('cur_page', '1')
         page_size = 5
+
+        log.info('获取文章分类列表cur_page：' + cur_page)
 
         sql = """
             select (
@@ -60,6 +63,8 @@ class ArticleClassHandler(RequestHandler):
     def get(self):
         class_id = self.get_argument('class_id', None)
 
+        log.info('获取文章分类信息：class_id ' + class_id)
+
         session = DBSession()
         article_class = session.query(ArticleClass).filter_by(id=class_id).first()
         if not article_class:
@@ -74,6 +79,8 @@ class ArticleClassHandler(RequestHandler):
 
     def post(self):
         name = self.get_body_argument('name', None)
+
+        log.info('添加文章分类：' + name)
 
         now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         data = {
@@ -98,6 +105,8 @@ class ArticleClassHandler(RequestHandler):
         class_id = self.get_body_argument('class_id', None)
         name = self.get_body_argument('name', None)
 
+        log.info('修改文章分类：class_id ' + class_id + ' => ' + name)
+
         session = DBSession()
         article_class = session.query(ArticleClass).filter_by(id=class_id).first()
         if not article_class:
@@ -121,6 +130,8 @@ class ArticleClassHandler(RequestHandler):
 
     def delete(self):
         class_id = self.get_argument('class_id', None)
+
+        log.info('删除文章分类：class_id ' + class_id)
 
         session = DBSession()
         article_class = session.query(ArticleClass).filter_by(id=class_id).first()
