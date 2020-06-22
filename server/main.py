@@ -2,9 +2,18 @@ from tornado.ioloop import IOLoop
 from tornado.web import Application, StaticFileHandler
 
 import os
+import logging
 
 from config import images_dir
 from handler import *
+
+log = logging.getLogger()
+log.setLevel('DEBUG')
+stream_handler = logging.StreamHandler()
+fmt = logging.Formatter('输出时间:%(asctime)s -- 文件名:%(filename)s -- 行号:%(lineno)d -- 级别:%(levelname)s:%(message)s')
+stream_handler.setFormatter(fmt)
+stream_handler.setLevel('INFO')
+log.addHandler(stream_handler)
 
 
 def make_app():
@@ -42,6 +51,7 @@ def make_app():
 
 
 if __name__ == "__main__":
+    log.info('服务器启动：127.0.0.1:8888')
     app = make_app()
     app.listen(8888)
     IOLoop.current().start()
