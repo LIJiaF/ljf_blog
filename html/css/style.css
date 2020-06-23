@@ -936,8 +936,12 @@ body, input, button, textarea, select {
     transition-timing-function: cubic-bezier(0.47, 2.02, 0.31, -0.36);
 }
 
+.article-content h1, .article-content h2, .article-content h3, .article-content h4, .article-content h5 {
+    margin-bottom: 25px;
+    word-wrap: break-word;
+}
+
 .article-content p {
-    text-indent: 30px;
     margin-bottom: 18px;
     word-wrap: break-word;
 }
@@ -949,7 +953,7 @@ body, input, button, textarea, select {
     -khtml-user-select: text;
     user-select: text;
     margin-bottom: 18px;
-    margin-left: 30px;
+    padding: 5px 10px;
 }
 
 .article-copyright {

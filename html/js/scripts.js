@@ -117,28 +117,28 @@ $(window).scroll(function () {
     }
 });
 (function () {
-    var oMenu = document.getElementById("rightClickMenu");
-    var aLi = oMenu.getElementsByTagName("li");
-    for (i = 0; i < aLi.length; i++) {
-        aLi[i].onmouseover = function () {
-            $(this).addClass('rightClickMenuActive');
-        };
-        aLi[i].onmouseout = function () {
-            $(this).removeClass('rightClickMenuActive');
-        }
-    }
-    document.oncontextmenu = function (event) {
-        $(oMenu).fadeOut(0);
-        var event = event || window.event;
-        var style = oMenu.style;
-        $(oMenu).fadeIn(300);
-        style.top = event.clientY + "px";
-        style.left = event.clientX + "px";
-        return false
-    };
-    document.onclick = function () {
-        $(oMenu).fadeOut(100);
-    }
+    // var oMenu = document.getElementById("rightClickMenu");
+    // var aLi = oMenu.getElementsByTagName("li");
+    // for (i = 0; i < aLi.length; i++) {
+    //     aLi[i].onmouseover = function () {
+    //         $(this).addClass('rightClickMenuActive');
+    //     };
+    //     aLi[i].onmouseout = function () {
+    //         $(this).removeClass('rightClickMenuActive');
+    //     }
+    // }
+    // document.oncontextmenu = function (event) {
+    //     $(oMenu).fadeOut(0);
+    //     var event = event || window.event;
+    //     var style = oMenu.style;
+    //     $(oMenu).fadeIn(300);
+    //     style.top = event.clientY + "px";
+    //     style.left = event.clientX + "px";
+    //     return false
+    // };
+    // document.onclick = function () {
+    //     $(oMenu).fadeOut(100);
+    // }
 })();
 document.onkeydown = function (event) {
     var e = event || window.event || arguments.callee.caller.arguments[0];
