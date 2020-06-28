@@ -5,9 +5,6 @@ from config import domain_name
 
 class ShowHandler(RequestHandler):
     def get(self, article_id):
-        cur_page = self.get_argument('page', '1')
-        cur_class = self.get_argument('class', '0')
-
         new_sql = """
             select a.id, a.class_id, ac.name, a.title, a.author, a.note, a.content, a.write_date
             from article a
@@ -82,7 +79,6 @@ class ShowHandler(RequestHandler):
                 'total': d.total
             })
 
-        next_page = str(int(cur_page) + 1)
         data = {
             'class_data': class_result,
             'new_data': new_result,

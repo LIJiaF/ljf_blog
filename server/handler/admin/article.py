@@ -5,12 +5,15 @@ import os
 from tornado.web import RequestHandler
 from model import DBSession, Article
 from config import domain_name
+from common import log
 
 
 class ArticleListHandler(RequestHandler):
     def get(self):
         cur_page = self.get_argument('cur_page', '1')
         page_size = 5
+
+        log.info('获取文章列表cur_page：' + cur_page)
 
         sql = """
             select (
@@ -52,6 +55,8 @@ class ArticleHandler(RequestHandler):
     def get(self):
         article_id = self.get_argument('article_id', None)
 
+        log.info('获取文章信息：article_id ' + article_id)
+
         session = DBSession()
         article = session.query(Article).filter_by(id=article_id).first()
         if not article:
@@ -87,6 +92,8 @@ class ArticleHandler(RequestHandler):
             'write_date': now
         }
 
+        log.info('添加文章：' + json.dumps(data))
+
         try:
             session = DBSession()
             new_article = Article(**data)
@@ -94,7 +101,7 @@ class ArticleHandler(RequestHandler):
             session.commit()
             session.close()
         except Exception as e:
-            print(e)
+            log.error(e)
             return self.finish(json.dumps({'code': -1, 'msg': '添加失败'}))
 
         return self.finish(json.dumps({'code': 0, 'msg': '添加成功'}))
@@ -121,6 +128,11 @@ class ArticleHandler(RequestHandler):
             'write_date': now
         }
 
+        log.info('修改文章：article_id ' + article_id)
+        log.info('修改文章：class_id ' + str(article.class_id) + ' => ' + class_id)
+        log.info('修改文章：title ' + article.title + ' => ' + title)
+        log.info('修改文章：note ' + article.note + ' => ' + note)
+
         try:
             image_url = image_url.lstrip(domain_name)
             if image_url != article.image_url:
@@ -132,13 +144,15 @@ class ArticleHandler(RequestHandler):
             session.commit()
             session.close()
         except Exception as e:
-            print(e)
+            log.error(e)
             return self.finish(json.dumps({'code': -1, 'msg': '修改失败'}))
 
         return self.finish(json.dumps({'code': 0, 'msg': '修改成功'}))
 
     def delete(self):
         article_id = self.get_argument('article_id', None)
+
+        log.info('删除文章：article_id ' + article_id)
 
         session = DBSession()
         article = session.query(Article).filter_by(id=article_id).one()
@@ -149,7 +163,7 @@ class ArticleHandler(RequestHandler):
             session.query(Article).filter_by(id=article_id).delete()
             session.commit()
         except Exception as e:
-            print(e)
+            log.error(e)
             return self.finish(json.dumps({'code': -1, 'msg': '删除失败'}))
 
         return self.finish(json.dumps({'code': 0, 'msg': '删除成功'}))

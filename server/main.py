@@ -34,7 +34,7 @@ def make_app():
         (r'/create_table', CreateTableHandler),
         (r'/drop_table', DropTableHandler),
 
-        (r"/article/images/(.*)", StaticFileHandler, {'path': 'images'}),
+        (r"/images/article/(.*)", StaticFileHandler, {'path': 'images/article'}),
         (r"/js/(.*)", StaticFileHandler, {'path': '../html/js'}),
         (r"/css/(.*)", StaticFileHandler, {'path': '../html/css'}),
         (r"/fonts/(.*)", StaticFileHandler, {'path': '../html/fonts'}),

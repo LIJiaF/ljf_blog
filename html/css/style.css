@@ -956,9 +956,17 @@ body, input, button, textarea, select {
     padding: 5px 10px;
 }
 
+.article-content ul {
+    margin-bottom: 18px;
+}
+
+.article-content li {
+    list-style: disc;
+    margin-left: 18px;
+}
+
 .article-copyright {
     background-color: #EEE;
-    padding-right: 30px;
     font-size: 12px;
     padding: 3px 0;
     border-radius: 3px;

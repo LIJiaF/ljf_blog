@@ -5,6 +5,7 @@ import random
 
 from allow_origin import BaseHandler
 from config import images_dir
+from common import log
 
 
 class UploadHandler(BaseHandler):
@@ -25,11 +26,17 @@ class UploadHandler(BaseHandler):
 
     def post(self):
         file_metas = self.request.files.get('file', None)
+        type = self.get_argument('type', '')
+
         if not file_metas:
             return self.return_msg('文件上传失败')
         else:
             for meta in file_metas:
                 try:
+                    type_dir = os.path.join(images_dir, type)
+                    if type and not os.path.exists(type_dir):
+                        os.makedirs(type_dir)
+
                     if meta['content_type'] not in ('image/jpeg', 'image/png'):
                         return self.return_msg('文件类型错误')
 
@@ -38,11 +45,12 @@ class UploadHandler(BaseHandler):
 
                     postfix = os.path.splitext(meta['filename'])[-1]
                     filename = str(int(time.time())) + str(random.randint(100, 999)) + postfix
-                    file_path = os.path.join(images_dir, filename)
+                    file_path = os.path.join(images_dir, type, filename)
 
                     with open(file_path, 'wb') as up:
                         up.write(meta['body'])
                 except Exception as e:
+                    log.error(e)
                     return self.return_msg('文件上传失败')
 
-            return self.return_msg('文件上传成功', 0, image_url='/'.join(['article', images_dir, filename]))
+            return self.return_msg('文件上传成功', 0, image_url='/'.join([images_dir, type, filename]))
