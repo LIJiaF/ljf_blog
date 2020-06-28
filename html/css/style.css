@@ -922,6 +922,7 @@ body, input, button, textarea, select {
     display: block;
     max-width: 100%;
     height: auto;
+    margin-bottm: -18px;
 }
 
 .article-content img:hover {
@@ -1761,7 +1762,6 @@ body, input, button, textarea, select {
 
     .article-content img {
         border-radius: 5px;
-        margin-bottm: -18px;
     }
 
     .post-copyright {
