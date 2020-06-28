@@ -80,14 +80,14 @@ class ArticleClassHandler(RequestHandler):
     def post(self):
         name = self.get_body_argument('name', None)
 
-        log.info('添加文章分类：' + name)
-
         now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         data = {
             'name': name,
             'create_date': now,
             'write_date': now
         }
+
+        log.info('添加文章分类：' + json.dumps(data))
 
         try:
             session = DBSession()
@@ -96,7 +96,7 @@ class ArticleClassHandler(RequestHandler):
             session.commit()
             session.close()
         except Exception as e:
-            print(e)
+            log.error(e)
             return self.finish(json.dumps({'code': -1, 'msg': '添加失败'}))
 
         return self.finish(json.dumps({'code': 0, 'msg': '添加成功'}))
@@ -104,8 +104,6 @@ class ArticleClassHandler(RequestHandler):
     def put(self):
         class_id = self.get_body_argument('class_id', None)
         name = self.get_body_argument('name', None)
-
-        log.info('修改文章分类：class_id ' + class_id + ' => ' + name)
 
         session = DBSession()
         article_class = session.query(ArticleClass).filter_by(id=class_id).first()
@@ -118,12 +116,15 @@ class ArticleClassHandler(RequestHandler):
             'write_date': now
         }
 
+        log.info('修改文章分类：class_id ' + class_id)
+        log.info('修改文章分类：name ' + article_class.name + ' => ' + name)
+
         try:
             session.query(ArticleClass).filter_by(id=class_id).update(data)
             session.commit()
             session.close()
         except Exception as e:
-            print(e)
+            log.error(e)
             return self.finish(json.dumps({'code': -1, 'msg': '修改失败'}))
 
         return self.finish(json.dumps({'code': 0, 'msg': '修改成功'}))
@@ -142,7 +143,7 @@ class ArticleClassHandler(RequestHandler):
             session.query(ArticleClass).filter_by(id=class_id).delete()
             session.commit()
         except Exception as e:
-            print(e)
+            log.error(e)
             return self.finish(json.dumps({'code': -1, 'msg': '删除失败'}))
 
         return self.finish(json.dumps({'code': 0, 'msg': '删除成功'}))
