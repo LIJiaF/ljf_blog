@@ -918,11 +918,10 @@ body, input, button, textarea, select {
 }
 
 .article-content img {
-    margin: 5px auto;
+    margin: 5px auto -18px;
     display: block;
     max-width: 100%;
     height: auto;
-    margin-bottm: -18px;
 }
 
 .article-content img:hover {
