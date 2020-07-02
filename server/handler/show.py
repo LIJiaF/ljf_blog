@@ -43,6 +43,8 @@ class ShowHandler(RequestHandler):
         cursor = session.execute(class_sql)
         class_data = cursor.fetchall()
 
+        session.close()
+
         new_result = {}
         for d in new_data:
             new_result = {
@@ -84,4 +86,5 @@ class ShowHandler(RequestHandler):
             'new_data': new_result,
             'hot_data': hot_result
         }
+
         self.render("show.html", data=data)

@@ -42,6 +42,8 @@ class MainHandler(RequestHandler):
         cursor = session.execute(class_sql)
         class_data = cursor.fetchall()
 
+        session.close()
+
         new_result = []
         for d in new_data:
             image_url = d.image_url
@@ -87,4 +89,5 @@ class MainHandler(RequestHandler):
             'hot_data': hot_result,
             'next_page': next_page
         }
+
         self.render("index.html", data=data)
