@@ -39,6 +39,8 @@ def make_app():
         (r"/css/(.*)", StaticFileHandler, {'path': '../html/css'}),
         (r"/fonts/(.*)", StaticFileHandler, {'path': '../html/fonts'}),
         (r"/images/(.*)", StaticFileHandler, {'path': '../html/images'}),
+
+        (r'/.*', ErrorHandler),
     ], **setting)
 
 
